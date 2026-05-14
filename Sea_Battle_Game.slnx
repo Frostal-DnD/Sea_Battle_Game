@@ -1,0 +1,7 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="Sea_Battle_Game/Sea_Battle_Game.vcxproj" />
+</Solution>
