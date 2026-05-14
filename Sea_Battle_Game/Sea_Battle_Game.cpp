@@ -1,8 +1,11 @@
-﻿#include <iostream>
+#include <iostream>
+#include <vector>
+#include <cstdlib>
 #include <ctime>
 #include <Windows.h>
 #include <conio.h>
 #include <iomanip>
+#include <string.h>
 
 using namespace std;
 
@@ -189,11 +192,112 @@ ErrorImput:
     }
 }
 
+void punemNavaPlayerTwo() {
+ErrorImput2:
+    x = rand() % 10 + 1;
+    y = rand() % 10 + 1;
+    l = rand() % 4 + 1;
+    s = (rand() % 2 == 0) ? 'v' : 'o';
+    // Evidenta flotei
+    if (l == 4 && nave2[3] >= 1) {
+        goto ErrorImput2;
+    }
+    if (l == 3 && nave2[2] >= 2) {
+        goto ErrorImput2;
+    }
+    if (l == 2 && nave2[1] >= 3) {
+        goto ErrorImput2;
+    }
+    if (l == 1 && nave2[0] >= 4) {
+        goto ErrorImput2;
+    }
+    if (s == 'v') {
+        if (x + (l - 1) > 10) {
+            goto ErrorImput2;
+        }
+        if (PlayerTwo[x][y][2] == '#') {
+            goto ErrorImput2;
+        }
+        if (PlayerTwo[x + l - 1][y][2] == '#') {
+            goto ErrorImput2;
+        }
+        //plasarea navei
+        for (int i = 0; i < l; i++) {
+            PlayerTwo[x + i][y][1] = '*';
+        }
+        for (int i = 0; i < l; i++) {
+            IdNaveTwo[x + i][y] = idShipAI;
+        }
+        idShipAI++;
+        countlanave++;
+        //actualizam "collision layer"
+        for (int i = 0; i < (l + 2); i++) {
+            PlayerTwo[x - 1 + i][y - 1][2] = '#';
+            PlayerTwo[x - 1 + i][y][2] = '#';
+            PlayerTwo[x - 1 + i][y + 1][2] = '#';
+        }
+        // actualizam evidenta flotei
+        if (l == 1) {
+            nave2[0]++;
+        }
+        if (l == 2) {
+            nave2[1]++;
+        }
+        if (l == 3) {
+            nave2[2]++;
+        }
+        if (l == 4) {
+            nave2[3]++;
+        }
+    }
+    if (s == 'o') {
+        if (y + (l - 1) > 10) {
+            goto ErrorImput2;
+        }
+        if (PlayerTwo[x][y][2] == '#') {
+            goto ErrorImput2;
+        }
+        if (PlayerTwo[x][y + l - 1][2] == '#') {
+            goto ErrorImput2;
+        }
+        //plasarea navei
+        for (int i = 0; i < l; i++) {
+            PlayerTwo[x][y + i][1] = '*';
+        }
+        for (int i = 0; i < l; i++) {
+            IdNaveTwo[x][y + i] = idShipAI;
+        }
+        idShipAI++;
+        countlanave++;
+        //actualizam "collision layer"
+        for (int i = 0; i < (l + 2); i++) {
+            PlayerTwo[x + 1][y - 1 + i][2] = '#';
+            PlayerTwo[x][y - 1 + i][2] = '#';
+            PlayerTwo[x - 1][y - 1 + i][2] = '#';
+        }
+        // actualizam evidenta flotei
+        if (l == 1) {
+            nave2[0]++;
+        }
+        if (l == 2) {
+            nave2[1]++;
+        }
+        if (l == 3) {
+            nave2[2]++;
+        }
+        if (l == 4) {
+            nave2[3]++;
+        }
+    }
+}
 
+
+
+// main
 int main() {
     srand(time(0));
     system("color 71");
-    SetConsoleTitleW(L"Sea_Battle");
+    SetConsoleTitle(L"Sea_Battle");
     SetConsoleCP(1251);
     SetConsoleOutputCP(1251);
 
@@ -230,7 +334,9 @@ int main() {
         system("cls");
     }
 
-
+    while (countlanave < 10) {
+        punemNavaPlayerTwo();
+    }
 
     for (int i = 1; i < 11; i++) {
         for (int j = 1; j < 11; j++) {
