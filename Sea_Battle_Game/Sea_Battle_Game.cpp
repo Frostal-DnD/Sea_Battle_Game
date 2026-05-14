@@ -13,9 +13,9 @@ char PlayerOne[12][12][3];
 char PlayerTwo[12][12][3];
 int IdNaveOne[12][12];
 int IdNaveTwo[12][12];
-int x, y, l, idShip = 1, idCount, idNow, win = 0, liveOne, liveTwo, idShipAI = 1, countlanave = 0;
+int x, y, l, idShip = 1, idCount, idNow, win = 0, liveOne, liveTwo, idShipAI = 1, countlanave = 0, LastStatusPlayer = 0, LastStatusAI = 0, lastxPl = 0, lastyPl = 0, lastxAI = 0, lastyAI = 0;
 int nave[4] = { 0 }, nave2[4] = { 0 };
-char s, a, ychar;
+char s, a, ychar, lastyAIchar = '-', lastyPlchar = '-';
 
 // plasarea Navelor
 void punemNavaPlayerOne() {
@@ -304,6 +304,316 @@ void setcur(int x, int y) {
     SetConsoleCursorPosition(hConsole, coord);
 }
 
+void draw() {
+    int setY = 0;
+    int setX1 = 0;
+    int setX2 = 40;
+
+    // Header-ele
+    setcur(setX1, setY);
+    cout << "      FLOTA MEA";
+    setcur(setX2, setY);
+    cout << "      FLOTA AI";
+    setY++;
+
+    switch (lastyAI) {
+    case 1:
+        lastyAIchar = 'A';
+        break;
+    case 2:
+        lastyAIchar = 'B';
+        break;
+    case 3:
+        lastyAIchar = 'C';
+        break;
+    case 4:
+        lastyAIchar = 'D';
+        break;
+    case 5:
+        lastyAIchar = 'E';
+        break;
+    case 6:
+        lastyAIchar = 'F';
+        break;
+    case 7:
+        lastyAIchar = 'G';
+        break;
+    case 8:
+        lastyAIchar = 'H';
+        break;
+    case 9:
+        lastyAIchar = 'I';
+        break;
+    case 10:
+        lastyAIchar = 'J';
+        break;
+    default:
+        break;
+    }
+
+    switch (lastyPl) {
+    case 1:
+        lastyPlchar = 'A';
+        break;
+    case 2:
+        lastyPlchar = 'B';
+        break;
+    case 3:
+        lastyPlchar = 'C';
+        break;
+    case 4:
+        lastyPlchar = 'D';
+        break;
+    case 5:
+        lastyPlchar = 'E';
+        break;
+    case 6:
+        lastyPlchar = 'F';
+        break;
+    case 7:
+        lastyPlchar = 'G';
+        break;
+    case 8:
+        lastyPlchar = 'H';
+        break;
+    case 9:
+        lastyPlchar = 'I';
+        break;
+    case 10:
+        lastyPlchar = 'J';
+        break;
+    default:
+        break;
+    }
+
+
+    setcur(setX1, setY);
+    cout << "AI last try:" << lastxAI << " " << lastyAIchar << endl;
+    setcur(setX2, setY);
+    cout << "My last try:" << lastxPl << " " << lastyPlchar << endl;
+    setY++;
+    setcur(setX1, setY);
+    switch (LastStatusAI) {
+    case 0:
+        cout << "Status: ";
+        break;
+    case 1:
+        cout << "Status: hit";
+        break;
+    case 2:
+        cout << "Status: kill";
+        break;
+    case 3:
+        cout << "Status: miss";
+        break;
+    }
+    setcur(setX2, setY);
+    switch (LastStatusPlayer) {
+    case 0:
+        cout << "Status: ";
+        break;
+    case 1:
+        cout << "Status: hit";
+        break;
+    case 2:
+        cout << "Status: kill";
+        break;
+    case 3:
+        cout << "Status: miss";
+        break;
+    }
+    setY++;
+
+
+
+    // Numerele coloanelor
+    setcur(setX1, setY);
+    cout << "     A  B  C  D  E  F  G  H  I  J";
+    setcur(setX2, setY);
+    cout << "     A  B  C  D  E  F  G  H  I  J";
+    setY++;
+
+    // Randurile
+    for (int i = 1; i < 11; i++) {
+
+        //PlayerOne
+        setcur(setX1, setY);
+        cout << setw(3) << i << " ";
+        for (int j = 1; j < 11; j++) {
+            if (PlayerOne[i][j][1] == '*') {
+                Col(7, 2);
+                cout << " * ";
+                Col(7, 1);
+            }
+            else if (PlayerOne[i][j][1] == 'h') {
+                Col(7, 6);
+                cout << " h ";
+                Col(7, 1);
+            }
+            else if (PlayerOne[i][j][1] == 'k') {
+                Col(7, 4);
+                cout << " k ";
+                Col(7, 1);
+            }
+            else {
+                cout << " " << PlayerOne[i][j][1] << " ";
+            }
+        }
+
+
+        //AI
+        setcur(setX2, setY);
+        cout << setw(3) << i << " ";
+        for (int j = 1; j < 11; j++) {
+            if (PlayerTwo[i][j][0] == 'h') {
+                Col(7, 6);
+                cout << " h ";
+                Col(7, 1);
+            }
+            else if (PlayerTwo[i][j][0] == 'k') {
+                Col(7, 4);
+                cout << " k ";
+                Col(7, 1);
+            }
+            else {
+                cout << " " << PlayerTwo[i][j][0] << " ";
+            }
+        }
+
+
+
+
+        setY++;
+    }
+
+    // Mutam cursorul sub ambele matrici
+    setcur(0, setY + 1);
+}
+
+// verificam e hit sau kill
+// verificam e hit sau kill
+
+
+void verificarePlayer(int x, int y) {
+    idNow = IdNaveTwo[x][y];
+    IdNaveTwo[x][y] = IdNaveTwo[x][y] * (-1);
+    idCount = 0;
+    for (int i = 1; i < 11; i++) {
+        for (int j = 1; j < 11; j++) {
+            if (IdNaveTwo[i][j] == idNow) {
+                idCount++;
+            }
+        }
+    }
+}
+
+
+
+// Attack
+
+void attackPlayerOne() {
+RepeatAttack1:
+    cout << "Unde doriti sa atacati ?\n";
+
+
+    if (!(cin >> x >> ychar)) {
+
+        cout << "Input invalid.\n";
+
+        cin.clear();              
+        cin.ignore(1000, '\n');   
+
+        goto RepeatAttack1;
+    }
+
+
+    if (x > 10 || x < 1) {
+        cout << "Nu puteti pune acolo\n";
+        goto RepeatAttack1;
+    }
+
+    switch (ychar) {
+    case 'A':
+    case 'a':
+        y = 1;
+        break;
+    case 'B':
+    case 'b':
+        y = 2;
+        break;
+    case 'C':
+    case 'c':
+        y = 3;
+        break;
+    case 'D':
+    case 'd':
+        y = 4;
+        break;
+    case 'E':
+    case 'e':
+        y = 5;
+        break;
+    case 'F':
+    case 'f':
+        y = 6;
+        break;
+    case 'G':
+    case 'g':
+        y = 7;
+        break;
+    case 'H':
+    case 'h':
+        y = 8;
+        break;
+    case 'I':
+    case 'i':
+        y = 9;
+        break;
+    case 'J':
+    case 'j':
+        y = 10;
+        break;
+    default:
+        cout << "Nu puteti lovi acolo\n";
+        goto RepeatAttack1;
+    }
+
+
+
+    if (PlayerTwo[x][y][0] != '.') {
+        cout << "Ati impuscat deja acolo anterior\n";
+        goto RepeatAttack1;
+    }
+
+    if (PlayerTwo[x][y][1] == '*') {
+
+        verificarePlayer(x, y);
+
+
+        if (idCount > 0) {
+            PlayerTwo[x][y][0] = 'h';
+            lastxPl = x;
+            lastyPl = y;
+            LastStatusPlayer = 1;
+            --liveTwo;
+        }
+        else if (idCount <= 0) {
+            PlayerTwo[x][y][0] = 'k';
+            lastxPl = x;
+            lastyPl = y;
+            LastStatusPlayer = 2;
+            --liveTwo;
+        }
+    }
+    else if (PlayerTwo[x][y][1] == '.') {
+
+        PlayerTwo[x][y][0] = '-';
+        lastxPl = x;
+        lastyPl = y;
+        LastStatusPlayer = 3;
+    }
+
+}
 
 // main
 int main() {
@@ -360,6 +670,23 @@ int main() {
         for (int j = 1; j < 11; j++) {
             if (PlayerTwo[i][j][1] == '*') { liveTwo++; }
         }
+    }
+
+    while (win == 0) {
+        draw();
+
+        // Attack Player
+        attackPlayerOne();
+
+        system("cls");
+
+        if (liveOne <= 0) {
+            win = 2;
+        }
+        if (liveTwo <= 0) {
+            win = 1;
+        }
+
     }
 
     if (win == 1) {
