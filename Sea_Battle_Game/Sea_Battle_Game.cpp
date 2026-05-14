@@ -17,7 +17,6 @@ int x, y, l, idShip = 1, idCount, idNow, win = 0, liveOne, liveTwo, idShipAI = 1
 int nave[4] = { 0 }, nave2[4] = { 0 };
 char s, a, ychar;
 
-
 // plasarea Navelor
 void punemNavaPlayerOne() {
 ErrorImput:
@@ -291,6 +290,19 @@ ErrorImput2:
     }
 }
 
+//Graphic Tools
+void Col(int bg, int txt) {
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleTextAttribute(hConsole, (WORD)((bg << 4) | txt));
+}
+
+void setcur(int x, int y) {
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    COORD coord;
+    coord.X = x;
+    coord.Y = y;
+    SetConsoleCursorPosition(hConsole, coord);
+}
 
 
 // main
@@ -349,8 +361,6 @@ int main() {
             if (PlayerTwo[i][j][1] == '*') { liveTwo++; }
         }
     }
-
-
 
     if (win == 1) {
         cout << "\nYOU WIN\n";
