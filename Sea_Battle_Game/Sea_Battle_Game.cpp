@@ -597,7 +597,7 @@ RepeatAttack1:
 
     if (PlayerTwo[x][y][1] == '*') {
         // verificam e hit sau kill
-        verificarePlayer( x, y);
+        verificarePlayer(x, y);
 
         if (idCount > 0) {
             PlayerTwo[x][y][0] = 'h';
@@ -626,7 +626,62 @@ RepeatAttack1:
 
 void attackAI() {
 
-    if (Target == 0) {
+    // search mode
+    if (Target == 1) {
+
+    SearchMode:
+
+        if (Targetqueue >= 4) {
+
+            Target = 0;
+            Targetqueue = 0;
+            direction = 0;
+            goto RandomMode;
+        }
+
+        aiX = Xmin + dirX[Targetqueue];
+        aiY = Ymin + dirY[Targetqueue];
+
+
+        if (aiX < 1 || aiX > 10 || aiY < 1 || aiY > 10 ||
+            PlayerOne[aiX][aiY][1] == 'h' ||
+            PlayerOne[aiX][aiY][1] == 'k' ||
+            PlayerOne[aiX][aiY][1] == '-') {
+            Targetqueue++;
+            goto SearchMode;
+        }
+
+        if (PlayerOne[aiX][aiY][1] == '*') {
+            verificareAI(aiX, aiY);
+            if (idCount > 0) {
+                PlayerOne[aiX][aiY][1] = 'h';
+                Target = 2;
+                if (aiX > Xmin) { Xmax = aiX; Ymax = Ymin; direction = 0; }
+                if (aiX < Xmin) { Xmax = aiX; Ymax = Ymin; direction = 1; }
+                if (aiY > Ymin) { Xmax = Xmin; Ymax = aiY; direction = 0; }
+                if (aiY < Ymin) { Xmax = Xmin; Ymax = aiY; direction = 1; }
+                --liveOne;
+                lastxAI = aiX; lastyAI = aiY;
+                LastStatusAI = 1;
+            }
+            else {
+                PlayerOne[aiX][aiY][1] = 'k';
+                Target = 0; Targetqueue = 0; direction = 0;
+                --liveOne;
+                lastxAI = aiX; lastyAI = aiY;
+                LastStatusAI = 2;
+            }
+        }
+        else if (PlayerOne[aiX][aiY][1] == '.') {
+            PlayerOne[aiX][aiY][1] = '-';
+            Targetqueue++;
+            lastxAI = aiX; lastyAI = aiY;
+            LastStatusAI = 3;
+        }
+
+    }
+    // random mode
+    else if (Target == 0) {
     RandomMode:
 
 
