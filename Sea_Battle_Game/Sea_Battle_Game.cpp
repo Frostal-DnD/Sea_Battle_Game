@@ -13,9 +13,11 @@ char PlayerOne[12][12][3];
 char PlayerTwo[12][12][3];
 int IdNaveOne[12][12];
 int IdNaveTwo[12][12];
-int x, y, l, idShip = 1, idCount, idNow, win = 0, liveOne, liveTwo, idShipAI = 1, countlanave = 0, LastStatusPlayer = 0, LastStatusAI = 0, lastxPl = 0, lastyPl = 0, lastxAI = 0, lastyAI = 0;
+int x, y, l, idShip = 1, idCount, idNow, win = 0, liveOne, liveTwo, idShipAI = 1, countlanave = 0, Target, Targetqueue, Ymin, Xmin, Ymax, Xmax, direction, aiX, aiY, LastStatusPlayer = 0, LastStatusAI = 0, lastxPl = 0, lastyPl = 0, lastxAI = 0, lastyAI = 0;
 int nave[4] = { 0 }, nave2[4] = { 0 };
 char s, a, ychar, lastyAIchar = '-', lastyPlchar = '-';
+int dirX[4] = { -1, 1, 0, 0 };
+int dirY[4] = { 0, 0, -1, 1 };
 
 // plasarea Navelor
 void punemNavaPlayerOne() {
@@ -491,8 +493,18 @@ void draw() {
 }
 
 // verificam e hit sau kill
-// verificam e hit sau kill
-
+void verificareAI(int x, int y) {
+    idNow = IdNaveOne[x][y];
+    IdNaveOne[x][y] = IdNaveOne[x][y] * (-1);
+    idCount = 0;
+    for (int i = 1; i < 11; i++) {
+        for (int j = 1; j < 11; j++) {
+            if (IdNaveOne[i][j] == idNow) {
+                idCount++;
+            }
+        }
+    }
+}
 
 void verificarePlayer(int x, int y) {
     idNow = IdNaveTwo[x][y];
@@ -507,21 +519,19 @@ void verificarePlayer(int x, int y) {
     }
 }
 
-
-
 // Attack
 
 void attackPlayerOne() {
 RepeatAttack1:
     cout << "Unde doriti sa atacati ?\n";
-
+    //cout << Xmax << " " << Xmin << " " << Ymax << " " << Ymin << " " << Target;
 
     if (!(cin >> x >> ychar)) {
 
         cout << "Input invalid.\n";
 
-        cin.clear();              
-        cin.ignore(1000, '\n');   
+        cin.clear();              // scoate fail state
+        cin.ignore(1000, '\n');   // sterge linia gresita
 
         goto RepeatAttack1;
     }
@@ -586,9 +596,8 @@ RepeatAttack1:
     }
 
     if (PlayerTwo[x][y][1] == '*') {
-
-        verificarePlayer(x, y);
-
+        // verificam e hit sau kill
+        verificarePlayer( x, y);
 
         if (idCount > 0) {
             PlayerTwo[x][y][0] = 'h';
@@ -611,6 +620,58 @@ RepeatAttack1:
         lastxPl = x;
         lastyPl = y;
         LastStatusPlayer = 3;
+    }
+
+}
+
+void attackAI() {
+
+    if (Target == 0) {
+    RandomMode:
+
+
+        for (int i = 0; i < 4; i++) {
+            int r = rand() % 4;
+            swap(dirX[i], dirX[r]);
+            swap(dirY[i], dirY[r]);
+        }
+
+    RepeatRandom:
+        aiX = rand() % 10 + 1;
+        aiY = rand() % 10 + 1;
+
+
+        if (PlayerOne[aiX][aiY][1] == 'h' ||
+            PlayerOne[aiX][aiY][1] == 'k' ||
+            PlayerOne[aiX][aiY][1] == '-') {
+            goto RepeatRandom;
+        }
+
+        if (PlayerOne[aiX][aiY][1] == '*') {
+            verificareAI(aiX, aiY);
+            if (idCount > 0) {
+                PlayerOne[aiX][aiY][1] = 'h';
+                Target = 1;
+                Xmin = aiX; Ymin = aiY;
+                Xmax = aiX; Ymax = aiY;
+                Targetqueue = 0;
+                --liveOne;
+                lastxAI = aiX; lastyAI = aiY;
+                LastStatusAI = 1;
+            }
+            else {
+                PlayerOne[aiX][aiY][1] = 'k';
+                --liveOne;
+                lastxAI = aiX; lastyAI = aiY;
+                LastStatusAI = 2;
+            }
+        }
+        else if (PlayerOne[aiX][aiY][1] == '.') {
+            PlayerOne[aiX][aiY][1] = '-';
+            lastxAI = aiX; lastyAI = aiY;
+            LastStatusAI = 3;
+        }
+
     }
 
 }
