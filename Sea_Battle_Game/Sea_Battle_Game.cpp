@@ -781,7 +781,7 @@ int main()
 {
     srand(time(0));
     system("color 71");
-    SetConsoleTitle(L"Sea_Battle");
+    SetConsoleTitleW(L"Sea_Battle");
     SetConsoleCP(1251);
     SetConsoleOutputCP(1251);
     //initializam matricile
