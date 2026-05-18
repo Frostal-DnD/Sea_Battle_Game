@@ -489,6 +489,12 @@ void verificarePlayer(int x, int y) {
 // Attack
 void attackPlayerOne() {
 RepeatAttack1:
+    if (LastStatusPlayer == '1') {
+        cout << "HIT - mai trage odata\n\n";
+    }
+    if (LastStatusPlayer == '2') {
+        cout << "KILL - mai trage odata\n\n";
+    }
     cout << "Unde doriti sa atacati ?\n";
     //cout << Xmax << " " << Xmin << " " << Ymax << " " << Ymin << " " << Target;
     if (!(cin >> x >> ychar)) {
@@ -566,26 +572,23 @@ RepeatAttack1:
             lastyPl = y;
             LastStatusPlayer = 2;
             --liveTwo;
-
-
-            killID = IdNaveTwo[aiX][aiY];
+            killID = IdNaveTwo[x][y];
             for (int i = 1; i < 11; i++) {
                 for (int j = 1; j < 11; j++) {
                     if (IdNaveTwo[i][j] == killID) {
                         for (int a = 0; a < 3; a++) {
                             for (int b = 0; b < 3; b++) {
-                                if (PlayerTwo[i + a - 1][j + b - 1][1] == '.') {
-                                    PlayerTwo[i + a - 1][j + b - 1][1] = '-';
+                                if (PlayerTwo[i + a - 1][j + b - 1][0] == '.') {
+                                    PlayerTwo[i + a - 1][j + b - 1][0] = '-';
                                 }
-                                if (PlayerTwo[i + a][j + b][1] == 'h') {
-                                    PlayerTwo[i + a][j + b][1] = 'k';
+                                if (PlayerTwo[i + a][j + b][0] == 'h') {
+                                    PlayerTwo[i + a][j + b][0] = 'k';
                                 }
                             }
                         }
                     }
                 }
             }
-
         }
     }
     else if (PlayerTwo[x][y][1] == '.') {
@@ -647,7 +650,6 @@ void attackAI() {
                 --liveOne;
                 lastxAI = aiX; lastyAI = aiY;
                 LastStatusAI = 2;
-
                 killID = IdNaveOne[aiX][aiY];
                 for (int i = 1; i < 11; i++) {
                     for (int j = 1; j < 11; j++) {
@@ -843,12 +845,15 @@ int main() {
         }
     }
     while (win == 0) {
-
         draw();
         // Attack Player
+   
         attackPlayerOne();
+       
         // Attack AI
+        
         attackAI();
+        
 
         system("cls");
         if (liveOne <= 0) {
@@ -857,7 +862,6 @@ int main() {
         if (liveTwo <= 0) {
             win = 1;
         }
-
     }
     if (win == 1) {
         cout << "\nYOU WIN\n";
@@ -866,3 +870,4 @@ int main() {
         cout << "\nGAME OVER\n";
     }
     return 0;
+}
