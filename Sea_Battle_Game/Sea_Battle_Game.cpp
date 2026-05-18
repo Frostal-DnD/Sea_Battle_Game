@@ -489,10 +489,10 @@ void verificarePlayer(int x, int y) {
 // Attack
 void attackPlayerOne() {
 RepeatAttack1:
-    if (LastStatusPlayer == '1') {
+    if (LastStatusPlayer == 1) {
         cout << "HIT - mai trage odata\n\n";
     }
-    if (LastStatusPlayer == '2') {
+    if (LastStatusPlayer == 2) {
         cout << "KILL - mai trage odata\n\n";
     }
     cout << "Unde doriti sa atacati ?\n";
@@ -802,7 +802,7 @@ void attackAI() {
 int main() {
     srand(time(0));
     system("color 71");
-    SetConsoleTitle(L"Sea_Battle");
+    SetConsoleTitleW(L"Sea_Battle");
     SetConsoleCP(1251);
     SetConsoleOutputCP(1251);
     //initializam matricile
@@ -847,13 +847,21 @@ int main() {
     while (win == 0) {
         draw();
         // Attack Player
-   
+        AttackPlayer:
         attackPlayerOne();
-       
+        if (LastStatusPlayer == 1 || LastStatusPlayer == 2) {
+            system("cls");
+            draw();
+            goto AttackPlayer;
+        }
         // Attack AI
-        
+        AttackAI:
         attackAI();
-        
+        if (LastStatusAI == 1 || LastStatusAI == 2) {
+            system("cls");
+            draw();
+            goto AttackAI;
+        }
 
         system("cls");
         if (liveOne <= 0) {
