@@ -6,32 +6,25 @@
 #include <conio.h>
 #include <iomanip>
 #include <string.h>
-
 using namespace std;
-
 char PlayerOne[12][12][3];
 char PlayerTwo[12][12][3];
 int IdNaveOne[12][12];
 int IdNaveTwo[12][12];
-int x, y, l, idShip = 1, idCount, idNow, win = 0, liveOne, liveTwo, idShipAI = 1, countlanave = 0, Target, Targetqueue, Ymin, Xmin, Ymax, Xmax, direction, aiX, aiY, LastStatusPlayer = 0, LastStatusAI = 0, lastxPl = 0, lastyPl = 0, lastxAI = 0, lastyAI = 0;
+int x, y, l, idShip = 1, idCount, idNow, win = 0, liveOne, liveTwo, idShipAI = 1, countlanave = 0, Target, Targetqueue, Ymin, Xmin, Ymax, Xmax, direction, aiX, aiY, LastStatusPlayer = 0, LastStatusAI = 0, lastxPl = 0, lastyPl = 0, lastxAI = 0, lastyAI = 0, killID ;
 int nave[4] = { 0 }, nave2[4] = { 0 };
-char s, a, ychar, lastyAIchar = '-', lastyPlchar = '-';
+char s, ychar, lastyAIchar = '-', lastyPlchar = '-';
 int dirX[4] = { -1, 1, 0, 0 };
 int dirY[4] = { 0, 0, -1, 1 };
-
 // plasarea Navelor
 void punemNavaPlayerOne() {
 ErrorImput:
-
     if (!(cin >> x >> ychar >> l >> s)) {
         cout << "Input invalid.\n";
-
         cin.clear();
         cin.ignore(1000, '\n');
-
         goto ErrorImput;
     }
-
     // regulile de plasare a flotei
     switch (ychar) {
     case 'A':
@@ -107,7 +100,6 @@ ErrorImput:
         cout << "Limita navelor de aceasta lungine a fost atinsa\n";
         goto ErrorImput;
     }
-
     if (s == 'v') {
         if (x + (l - 1) > 10) {
             cout << "Nava nu poate fi plasata aici.\n";
@@ -189,10 +181,8 @@ ErrorImput:
         if (l == 4) {
             nave[3]++;
         }
-
     }
 }
-
 void punemNavaPlayerTwo() {
 ErrorImput2:
     x = rand() % 10 + 1;
@@ -291,13 +281,11 @@ ErrorImput2:
         }
     }
 }
-
 //Graphic Tools
 void Col(int bg, int txt) {
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
     SetConsoleTextAttribute(hConsole, (WORD)((bg << 4) | txt));
 }
-
 void setcur(int x, int y) {
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
     COORD coord;
@@ -305,19 +293,16 @@ void setcur(int x, int y) {
     coord.Y = y;
     SetConsoleCursorPosition(hConsole, coord);
 }
-
 void draw() {
     int setY = 0;
     int setX1 = 0;
     int setX2 = 40;
-
     // Header-ele
     setcur(setX1, setY);
     cout << "      FLOTA MEA";
     setcur(setX2, setY);
     cout << "      FLOTA AI";
     setY++;
-
     switch (lastyAI) {
     case 1:
         lastyAIchar = 'A';
@@ -352,7 +337,6 @@ void draw() {
     default:
         break;
     }
-
     switch (lastyPl) {
     case 1:
         lastyPlchar = 'A';
@@ -387,8 +371,6 @@ void draw() {
     default:
         break;
     }
-
-
     setcur(setX1, setY);
     cout << "AI last try:" << lastxAI << " " << lastyAIchar << endl;
     setcur(setX2, setY);
@@ -425,19 +407,14 @@ void draw() {
         break;
     }
     setY++;
-
-
-
     // Numerele coloanelor
     setcur(setX1, setY);
     cout << "     A  B  C  D  E  F  G  H  I  J";
     setcur(setX2, setY);
     cout << "     A  B  C  D  E  F  G  H  I  J";
     setY++;
-
     // Randurile
     for (int i = 1; i < 11; i++) {
-
         //PlayerOne
         setcur(setX1, setY);
         cout << setw(3) << i << " ";
@@ -461,8 +438,6 @@ void draw() {
                 cout << " " << PlayerOne[i][j][1] << " ";
             }
         }
-
-
         //AI
         setcur(setX2, setY);
         cout << setw(3) << i << " ";
@@ -481,17 +456,11 @@ void draw() {
                 cout << " " << PlayerTwo[i][j][0] << " ";
             }
         }
-
-
-
-
         setY++;
     }
-
     // Mutam cursorul sub ambele matrici
     setcur(0, setY + 1);
 }
-
 // verificam e hit sau kill
 void verificareAI(int x, int y) {
     idNow = IdNaveOne[x][y];
@@ -505,7 +474,6 @@ void verificareAI(int x, int y) {
         }
     }
 }
-
 void verificarePlayer(int x, int y) {
     idNow = IdNaveTwo[x][y];
     IdNaveTwo[x][y] = IdNaveTwo[x][y] * (-1);
@@ -518,30 +486,21 @@ void verificarePlayer(int x, int y) {
         }
     }
 }
-
 // Attack
-
 void attackPlayerOne() {
 RepeatAttack1:
     cout << "Unde doriti sa atacati ?\n";
     //cout << Xmax << " " << Xmin << " " << Ymax << " " << Ymin << " " << Target;
-
     if (!(cin >> x >> ychar)) {
-
         cout << "Input invalid.\n";
-
         cin.clear();              // scoate fail state
         cin.ignore(1000, '\n');   // sterge linia gresita
-
         goto RepeatAttack1;
     }
-
-
     if (x > 10 || x < 1) {
         cout << "Nu puteti pune acolo\n";
         goto RepeatAttack1;
     }
-
     switch (ychar) {
     case 'A':
     case 'a':
@@ -587,14 +546,10 @@ RepeatAttack1:
         cout << "Nu puteti lovi acolo\n";
         goto RepeatAttack1;
     }
-
-
-
     if (PlayerTwo[x][y][0] != '.') {
         cout << "Ati impuscat deja acolo anterior\n";
         goto RepeatAttack1;
     }
-
     if (PlayerTwo[x][y][1] == '*') {
         // verificam e hit sau kill
         verificarePlayer( x, y);
@@ -614,19 +569,15 @@ RepeatAttack1:
         }
     }
     else if (PlayerTwo[x][y][1] == '.') {
-
         PlayerTwo[x][y][0] = '-';
         lastxPl = x;
         lastyPl = y;
         LastStatusPlayer = 3;
     }
-
 }
-
 void attackAI() {
     // destroy mode
     if (Target == 2) {
-
         if (Xmax == Xmin) {
             aiX = Xmax;
             aiY = (direction == 0) ? Ymax + 1 : Ymin - 1;
@@ -635,16 +586,11 @@ void attackAI() {
             aiX = (direction == 0) ? Xmax + 1 : Xmin - 1;
             aiY = Ymax;
         }
-
-
         if (aiX < 1 || aiX > 10 || aiY < 1 || aiY > 10 ||
             PlayerOne[aiX][aiY][1] == 'h' ||
             PlayerOne[aiX][aiY][1] == 'k' ||
             PlayerOne[aiX][aiY][1] == '-') {
-
             direction = 1 - direction;
-
-
             if (Xmax == Xmin) {
                 aiX = Xmax;
                 aiY = (direction == 0) ? Ymax + 1 : Ymin - 1;
@@ -654,19 +600,15 @@ void attackAI() {
                 aiY = Ymax;
             }
         }
-
-
         if (aiX < 1 || aiX > 10 || aiY < 1 || aiY > 10 ||
             PlayerOne[aiX][aiY][1] == 'h' ||
             PlayerOne[aiX][aiY][1] == 'k' ||
             PlayerOne[aiX][aiY][1] == '-') {
-
             Target = 0;
             Targetqueue = 0;
             direction = 0;
             goto RandomMode;
         }
-
         if (PlayerOne[aiX][aiY][1] == '*') {
             verificareAI(aiX, aiY);
             if (idCount > 0) {
@@ -685,6 +627,24 @@ void attackAI() {
                 --liveOne;
                 lastxAI = aiX; lastyAI = aiY;
                 LastStatusAI = 2;
+
+                killID = IdNaveOne[aiX][aiY];
+                for (int i = 1; i < 11; i++) {
+                    for (int j = 1; j < 11; j++) {
+                        if (IdNaveOne[i][j] == killID) {
+                            for (int a = 0; a < 3; a++) {
+                                for (int b = 0; b < 3; b++) {
+                                    if (PlayerOne[i + a - 1][j + b - 1][1] == '.') {
+                                        PlayerOne[i + a - 1][j + b - 1][1] = '-';
+                                    }
+                                    if (PlayerOne[i + a][j + b][1] == 'h') {
+                                        PlayerOne[i + a][j + b][1] = 'k';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
         else if (PlayerOne[aiX][aiY][1] == '.') {
@@ -693,25 +653,18 @@ void attackAI() {
             lastxAI = aiX; lastyAI = aiY;
             LastStatusAI = 3;
         }
-
     }
     // search mode
     else if (Target == 1) {
-
     SearchMode:
-
         if (Targetqueue >= 4) {
-
             Target = 0;
             Targetqueue = 0;
             direction = 0;
             goto RandomMode;
         }
-
         aiX = Xmin + dirX[Targetqueue];
         aiY = Ymin + dirY[Targetqueue];
-
-
         if (aiX < 1 || aiX > 10 || aiY < 1 || aiY > 10 ||
             PlayerOne[aiX][aiY][1] == 'h' ||
             PlayerOne[aiX][aiY][1] == 'k' ||
@@ -719,7 +672,6 @@ void attackAI() {
             Targetqueue++;
             goto SearchMode;
         }
-
         if (PlayerOne[aiX][aiY][1] == '*') {
             verificareAI(aiX, aiY);
             if (idCount > 0) {
@@ -739,6 +691,23 @@ void attackAI() {
                 --liveOne;
                 lastxAI = aiX; lastyAI = aiY;
                 LastStatusAI = 2;
+                killID = IdNaveOne[aiX][aiY];
+                for (int i = 1; i < 11; i++) {
+                    for (int j = 1; j < 11; j++) {
+                        if (IdNaveOne[i][j] == killID) {
+                            for (int a = 0; a < 3; a++) {
+                                for (int b = 0; b < 3; b++) {
+                                    if (PlayerOne[i + a - 1][j + b - 1][1] == '.') {
+                                        PlayerOne[i + a - 1][j + b - 1][1] = '-';
+                                    }
+                                    if (PlayerOne[i + a][j + b][1] == 'h') {
+                                        PlayerOne[i + a][j + b][1] = 'k';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
         else if (PlayerOne[aiX][aiY][1] == '.') {
@@ -747,30 +716,23 @@ void attackAI() {
             lastxAI = aiX; lastyAI = aiY;
             LastStatusAI = 3;
         }
-
     }
     // random mode
     else if (Target == 0) {
     RandomMode:
-
-
         for (int i = 0; i < 4; i++) {
             int r = rand() % 4;
             swap(dirX[i], dirX[r]);
             swap(dirY[i], dirY[r]);
         }
-
     RepeatRandom:
         aiX = rand() % 10 + 1;
         aiY = rand() % 10 + 1;
-
-
         if (PlayerOne[aiX][aiY][1] == 'h' ||
             PlayerOne[aiX][aiY][1] == 'k' ||
             PlayerOne[aiX][aiY][1] == '-') {
             goto RepeatRandom;
         }
-
         if (PlayerOne[aiX][aiY][1] == '*') {
             verificareAI(aiX, aiY);
             if (idCount > 0) {
@@ -788,6 +750,23 @@ void attackAI() {
                 --liveOne;
                 lastxAI = aiX; lastyAI = aiY;
                 LastStatusAI = 2;
+                killID = IdNaveOne[aiX][aiY];
+                for (int i = 1; i < 11; i++) {
+                    for (int j = 1; j < 11; j++) {
+                        if (IdNaveOne[i][j] == killID) {
+                            for (int a = 0; a < 3; a++) {
+                                for (int b = 0; b < 3; b++) {
+                                    if (PlayerOne[i + a - 1][j + b - 1][1] == '.') {
+                                        PlayerOne[i + a - 1][j + b - 1][1] = '-';
+                                    }
+                                    if (PlayerOne[i + a][j + b][1] == 'h') {
+                                        PlayerOne[i + a][j + b][1] = 'k';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
         else if (PlayerOne[aiX][aiY][1] == '.') {
@@ -795,36 +774,27 @@ void attackAI() {
             lastxAI = aiX; lastyAI = aiY;
             LastStatusAI = 3;
         }
-
     }
-
 }
-
 // main
-int main() {
+int main()
+{
     srand(time(0));
     system("color 71");
     SetConsoleTitle(L"Sea_Battle");
     SetConsoleCP(1251);
     SetConsoleOutputCP(1251);
-
     //initializam matricile
     for (int i = 0; i < 12; i++) {
         for (int j = 0; j < 12; j++) {
-
             for (int k = 0; k < 3; k++) {
-
                 PlayerOne[i][j][k] = '.';
                 PlayerTwo[i][j][k] = '.';
-
             }
-
             IdNaveOne[i][j] = 0;
             IdNaveTwo[i][j] = 0;
-
         }
     }
-
     for (int j = 0; j < 10; j++) {
         cout << "Introduceti coordonatele navei, lungimea ei si starea corabiei (v: verticala / o: orizontala), conform exemplului \n"
             "1 A 4 v \n\n";
@@ -840,35 +810,28 @@ int main() {
         punemNavaPlayerOne();
         system("cls");
     }
-
     while (countlanave < 10) {
         punemNavaPlayerTwo();
     }
-
     for (int i = 1; i < 11; i++) {
         for (int j = 1; j < 11; j++) {
             if (PlayerOne[i][j][1] == '*') { liveOne++; }
         }
     }
-
     for (int i = 1; i < 11; i++) {
         for (int j = 1; j < 11; j++) {
             if (PlayerTwo[i][j][1] == '*') { liveTwo++; }
         }
     }
-
     while (win == 0) {
-        draw();
 
+        draw();
         // Attack Player
         attackPlayerOne();
-
         // Attack AI
-
         attackAI();
 
         system("cls");
-
         if (liveOne <= 0) {
             win = 2;
         }
@@ -877,14 +840,11 @@ int main() {
         }
 
     }
-
     if (win == 1) {
         cout << "\nYOU WIN\n";
     }
     else if (win == 2) {
         cout << "\nGAME OVER\n";
     }
-
-
     return 0;
 }
