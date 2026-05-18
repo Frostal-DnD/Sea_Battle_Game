@@ -3,5 +3,5 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
-  <Project Path="Sea_Battle_Game/Sea_Battle_Game.vcxproj" />
+  <Project Path="Sea_Battle_Game/Sea_Battle_Game.vcxproj" Id="3da948a1-16e9-42a4-a9d5-9935cce8234e" />
 </Solution>
