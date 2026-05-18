@@ -11,7 +11,7 @@ char PlayerOne[12][12][3];
 char PlayerTwo[12][12][3];
 int IdNaveOne[12][12];
 int IdNaveTwo[12][12];
-int x, y, l, idShip = 1, idCount, idNow, win = 0, liveOne, liveTwo, idShipAI = 1, countlanave = 0, Target, Targetqueue, Ymin, Xmin, Ymax, Xmax, direction, aiX, aiY, LastStatusPlayer = 0, LastStatusAI = 0, lastxPl = 0, lastyPl = 0, lastxAI = 0, lastyAI = 0, killID ;
+int x, y, l, idShip = 1, idCount, idNow, win = 0, liveOne, liveTwo, idShipAI = 1, countlanave = 0, Target, Targetqueue, Ymin, Xmin, Ymax, Xmax, direction, aiX, aiY, LastStatusPlayer = 0, LastStatusAI = 0, lastxPl = 0, lastyPl = 0, lastxAI = 0, lastyAI = 0, killID;
 int nave[4] = { 0 }, nave2[4] = { 0 };
 char s, ychar, lastyAIchar = '-', lastyPlchar = '-';
 int dirX[4] = { -1, 1, 0, 0 };
@@ -552,7 +552,7 @@ RepeatAttack1:
     }
     if (PlayerTwo[x][y][1] == '*') {
         // verificam e hit sau kill
-        verificarePlayer( x, y);
+        verificarePlayer(x, y);
         if (idCount > 0) {
             PlayerTwo[x][y][0] = 'h';
             lastxPl = x;
@@ -566,6 +566,26 @@ RepeatAttack1:
             lastyPl = y;
             LastStatusPlayer = 2;
             --liveTwo;
+
+
+            killID = IdNaveTwo[aiX][aiY];
+            for (int i = 1; i < 11; i++) {
+                for (int j = 1; j < 11; j++) {
+                    if (IdNaveTwo[i][j] == killID) {
+                        for (int a = 0; a < 3; a++) {
+                            for (int b = 0; b < 3; b++) {
+                                if (PlayerTwo[i + a - 1][j + b - 1][1] == '.') {
+                                    PlayerTwo[i + a - 1][j + b - 1][1] = '-';
+                                }
+                                if (PlayerTwo[i + a][j + b][1] == 'h') {
+                                    PlayerTwo[i + a][j + b][1] = 'k';
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
         }
     }
     else if (PlayerTwo[x][y][1] == '.') {
@@ -777,11 +797,10 @@ void attackAI() {
     }
 }
 // main
-int main()
-{
+int main() {
     srand(time(0));
     system("color 71");
-    SetConsoleTitleW(L"Sea_Battle");
+    SetConsoleTitle(L"Sea_Battle");
     SetConsoleCP(1251);
     SetConsoleOutputCP(1251);
     //initializam matricile
@@ -847,4 +866,3 @@ int main()
         cout << "\nGAME OVER\n";
     }
     return 0;
-}
