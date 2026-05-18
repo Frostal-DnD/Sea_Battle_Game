@@ -597,8 +597,7 @@ RepeatAttack1:
 
     if (PlayerTwo[x][y][1] == '*') {
         // verificam e hit sau kill
-        verificarePlayer(x, y);
-
+        verificarePlayer( x, y);
         if (idCount > 0) {
             PlayerTwo[x][y][0] = 'h';
             lastxPl = x;
@@ -625,9 +624,79 @@ RepeatAttack1:
 }
 
 void attackAI() {
+    // destroy mode
+    if (Target == 2) {
 
+        if (Xmax == Xmin) {
+            aiX = Xmax;
+            aiY = (direction == 0) ? Ymax + 1 : Ymin - 1;
+        }
+        else {
+            aiX = (direction == 0) ? Xmax + 1 : Xmin - 1;
+            aiY = Ymax;
+        }
+
+
+        if (aiX < 1 || aiX > 10 || aiY < 1 || aiY > 10 ||
+            PlayerOne[aiX][aiY][1] == 'h' ||
+            PlayerOne[aiX][aiY][1] == 'k' ||
+            PlayerOne[aiX][aiY][1] == '-') {
+
+            direction = 1 - direction;
+
+
+            if (Xmax == Xmin) {
+                aiX = Xmax;
+                aiY = (direction == 0) ? Ymax + 1 : Ymin - 1;
+            }
+            else {
+                aiX = (direction == 0) ? Xmax + 1 : Xmin - 1;
+                aiY = Ymax;
+            }
+        }
+
+
+        if (aiX < 1 || aiX > 10 || aiY < 1 || aiY > 10 ||
+            PlayerOne[aiX][aiY][1] == 'h' ||
+            PlayerOne[aiX][aiY][1] == 'k' ||
+            PlayerOne[aiX][aiY][1] == '-') {
+
+            Target = 0;
+            Targetqueue = 0;
+            direction = 0;
+            goto RandomMode;
+        }
+
+        if (PlayerOne[aiX][aiY][1] == '*') {
+            verificareAI(aiX, aiY);
+            if (idCount > 0) {
+                PlayerOne[aiX][aiY][1] = 'h';
+                if (aiX > Xmax) Xmax = aiX;
+                if (aiX < Xmin) Xmin = aiX;
+                if (aiY > Ymax) Ymax = aiY;
+                if (aiY < Ymin) Ymin = aiY;
+                --liveOne;
+                lastxAI = aiX; lastyAI = aiY;
+                LastStatusAI = 1;
+            }
+            else {
+                PlayerOne[aiX][aiY][1] = 'k';
+                Target = 0; Targetqueue = 0; direction = 0;
+                --liveOne;
+                lastxAI = aiX; lastyAI = aiY;
+                LastStatusAI = 2;
+            }
+        }
+        else if (PlayerOne[aiX][aiY][1] == '.') {
+            PlayerOne[aiX][aiY][1] = '-';
+            direction = 1 - direction;
+            lastxAI = aiX; lastyAI = aiY;
+            LastStatusAI = 3;
+        }
+
+    }
     // search mode
-    if (Target == 1) {
+    else if (Target == 1) {
 
     SearchMode:
 
@@ -793,6 +862,10 @@ int main() {
 
         // Attack Player
         attackPlayerOne();
+
+        // Attack AI
+
+        attackAI();
 
         system("cls");
 
