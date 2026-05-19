@@ -39,6 +39,7 @@ Cum se joacă
 https://github.com/user-attachments/assets/139e7687-1cff-4ddb-adda-fe9e1bf4a029
 
 Plasarea navelor
+
 La pornire ești rugat să plasezi 10 nave una câte una. Introdu fiecare navă în formatul:
 ```
 <rând> <coloană> <lungime> <orientare>
@@ -118,4 +119,4 @@ Observații
 2. Necesită o consolă Windows cu suport pentru culori (standard `cmd.exe` sau Windows Terminal).
 ---
 Licență
-Acest proiect este distribuit în scop educațional. Ești liber să îl forkuiești și să îl îmbunătățești.
+> Acest proiect este distribuit în scop educațional. Ești liber să îl forkuiești și să îl îmbunătățești.
