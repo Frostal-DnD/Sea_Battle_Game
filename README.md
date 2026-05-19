@@ -35,11 +35,8 @@ Un executabil compilat se găsește la mapa de bază `Sea_Battle_Game.lnk`. Poat
 
 ---
 Cum se joacă 
-Video
 
-<video width="700" controls>
-  <source src="gameplay.mp4" type="video/mp4">
-</video>
+https://github.com/user-attachments/assets/139e7687-1cff-4ddb-adda-fe9e1bf4a029
 
 Plasarea navelor
 La pornire ești rugat să plasezi 10 nave una câte una. Introdu fiecare navă în formatul:
@@ -59,7 +56,7 @@ La pornire ești rugat să plasezi 10 nave una câte una. Introdu fiecare navă 
 
 
 
-###Exemplu de introducere:
+Exemplu de introducere:
 ```
 3 E 3 v
 ```
