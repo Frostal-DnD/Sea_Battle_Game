@@ -1,3 +1,4 @@
 ﻿  Sea_Battle_Game.cpp
-C:\Users\andre\Desktop\Sea_Battle_Game\Sea_Battle_Game\Sea_Battle_Game.cpp(805,15): warning C4244: аргумент: преобразование "time_t" в "unsigned int", возможна потеря данных
-  Sea_Battle_Game.vcxproj -> C:\Users\andre\Desktop\Sea_Battle_Game\x64\Debug\Sea_Battle_Game.exe
+C:\Users\andre\Downloads\Sea_Battle_Game-main(1)\Sea_Battle_Game-main\Sea_Battle_Game\Sea_Battle_Game.cpp(803,15): warning C4244: аргумент: преобразование "time_t" в "unsigned int", возможна потеря данных
+  LINK : не найден или не выполнена сборка C:\Users\andre\Downloads\Sea_Battle_Game-main(1)\Sea_Battle_Game-main\x64\Debug\Sea_Battle_Game.exe при последней инкрементной компоновке; выполняется полная компоновка
+  Sea_Battle_Game.vcxproj -> C:\Users\andre\Downloads\Sea_Battle_Game-main(1)\Sea_Battle_Game-main\x64\Debug\Sea_Battle_Game.exe
